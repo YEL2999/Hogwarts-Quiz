@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hogwarts Sorting Quiz</title>
+    <style>
+        body {
+            font-family: "Georgia", serif;
+            background-color: #1b1b2f;
+            color: #f5f5f5;
+            text-align: center;
+            padding: 50px;
+            transition: background 1s, color 1s;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.1);
+        }
+        #output {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        #creator {
+            margin-top: 50px;
+            color: yellow;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="font-size: 40px;">🧙‍♂️ Hogwarts Sorting Quiz 🧙‍♂️</h1>
+    <div id="quiz">
+        <p id="question"></p>
+        <div id="choices"></div>
+    </div>
+    <div id="output"></div>
+    <div id="creator">Created by:YEL</div>
+
+    <script>
+        const questions = [
+            {
+                q: "What would you most like to be known for?",
+                choices: [
+                    { text: "Courage and bravery", house: "Gryffindor" },
+                    { text: "Ambition and resourcefulness", house: "Slytherin" },
+                    { text: "Intelligence and wisdom", house: "Ravenclaw" },
+                    { text: "Kindness and loyalty", house: "Hufflepuff" }
+                ]
+            },
+            {
+                q: "Which magical creature do you like most?",
+                choices: [
+                    { text: "Dragon", house: "Gryffindor" },
+                    { text: "Basilisk", house: "Slytherin" },
+                    { text: "Phoenix", house: "Ravenclaw" },
+                    { text: "Hippogriff", house: "Hufflepuff" }
+                ]
+            },
+            {
+                q: "What would you rather study at Hogwarts?",
+                choices: [
+                    { text: "Defense Against the Dark Arts", house: "Gryffindor" },
+                    { text: "Potions", house: "Slytherin" },
+                    { text: "Charms", house: "Ravenclaw" },
+                    { text: "Herbology", house: "Hufflepuff" }
+                ]
+            },
+            {
+                q: "Which quality do you value most in a friend?",
+                choices: [
+                    { text: "Bravery", house: "Gryffindor" },
+                    { text: "Cunning", house: "Slytherin" },
+                    { text: "Intelligence", house: "Ravenclaw" },
+                    { text: "Loyalty", house: "Hufflepuff" }
+                ]
+            },
+            {
+                q: "Which would you most like to own?",
+                choices: [
+                    { text: "A sword with magical powers", house: "Gryffindor" },
+                    { text: "A ring of invisibility", house: "Slytherin" },
+                    { text: "A book of secrets", house: "Ravenclaw" },
+                    { text: "A magical healing potion", house: "Hufflepuff" }
+                ]
+            }
+        ];
+
+        let current = 0;
+        const scores = { Gryffindor: 0, Slytherin: 0, Ravenclaw: 0, Hufflepuff: 0 };
+
+        function showQuestion() {
+            if(current < questions.length){
+                document.getElementById("question").innerText = questions[current].q;
+                const choicesDiv = document.getElementById("choices");
+                choicesDiv.innerHTML = "";
+                questions[current].choices.forEach(choice => {
+                    const btn = document.createElement("button");
+                    btn.innerText = choice.text;
+                    btn.onclick = () => selectAnswer(choice.house);
+                    choicesDiv.appendChild(btn);
+                });
+                document.getElementById("output").innerText = "";
+            } else {
+                sortHouse();
+            }
+        }
+
+        function selectAnswer(house){
+            scores[house]++;
+            current++;
+            showQuestion();
+        }
+
+        function sortHouse(){
+            let maxScore = 0;
+            let topHouse = "";
+            for(const house in scores){
+                if(scores[house] > maxScore){
+                    maxScore = scores[house];
+                    topHouse = house;
+                }
+            }
+
+            // Change background and text color based on house
+            switch(topHouse){
+                case "Gryffindor":
+                    document.body.style.background = "#7F0909";
+                    document.body.style.color = "#FFC500";
+                    break;
+                case "Slytherin":
+                    document.body.style.background = "#1A472A";
+                    document.body.style.color = "#AAAAAA";
+                    break;
+                case "Ravenclaw":
+                    document.body.style.background = "#0E1A40";
+                    document.body.style.color = "#946B2D";
+                    break;
+                case "Hufflepuff":
+                    document.body.style.background = "#EEE117";
+                    document.body.style.color = "#000000";
+                    break;
+            }
+
+            // Display results without any image
+            document.getElementById("quiz").innerHTML = `<h2>🏰 You have been sorted into ${topHouse}! 🏰</h2>`;
+            document.getElementById("output").innerHTML = `
+                <p>Scores:</p>
+                <ul>
+                    <li>Gryffindor: ${scores.Gryffindor}</li>
+                    <li>Slytherin: ${scores.Slytherin}</li>
+                    <li>Ravenclaw: ${scores.Ravenclaw}</li>
+                    <li>Hufflepuff: ${scores.Hufflepuff}</li>
+                </ul>
+            `;
+        }
+
+        showQuestion();
+    </script>
+</body>
+</html>
